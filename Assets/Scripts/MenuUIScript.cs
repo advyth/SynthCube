@@ -38,7 +38,7 @@ public class MenuUIScript : MonoBehaviour
         float prevProgress = 0;
         while (!loadSync.isDone)
         {
-            StartCoroutine(LoadSmoothly(prevProgress, loadSync.progress, 4f, progressBar));
+            StartCoroutine(LoadSmoothly(prevProgress, loadSync.progress, 1f, progressBar));
             prevProgress = loadSync.progress;
             yield return null;
         }
