@@ -4,38 +4,46 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    //Game Manager
+    private GameManager game_manager;
 
     public AudioSource zapSound;
-
+    
+    //Map Game Objects
     public GameObject track_set;
     private GameObject track_set_clone;
     
+    //Overhead Bar Objects
     public GameObject overhead_bars;
     private GameObject overhead_bar_clone;
 
+    //Physics Forces
     private float sidewaysForce = 2f;
     private float forwardsForce = 40f;
 
-    
-
+    //Player Movement vars
     private bool moveLeft = false;
     private bool moveRight = false;
 
+    //Track State Management
     private int state = 2;
 
-
+    //Offset For Track Spawning
     private float offset = 60f;
+    
+    //Offset For Overhead Bar Spawning
     private float overheadOffset = 60f;
 
     private float screenWidth;
 
+    //Variable To Check If Speed has been Incremented for x speed
     private float updatedForSpeed = 0f;
 
-    private GameManager game_manager;
+    //Locally setting game state to "Just Began"
+    private string gameState = "init";
 
     
     
-
     // Start is called before the first frame update
    
     void Start()
@@ -44,30 +52,39 @@ public class PlayerController : MonoBehaviour
         screenWidth = Screen.width;
     }
 
+    //Function for incrementing speed gradually based on points earned
+    //TODO Set speed bar
+    //TODO Stepped Increments {+5, +10, +14, +17}
     private void SpeedUpdates()
     {
         if (game_manager.gameScore % 10 == 0 && game_manager.gameScore != 0 && updatedForSpeed != game_manager.gameScore)
         {
             updatedForSpeed = game_manager.gameScore;
-            forwardsForce += 5f;
+            forwardsForce += 5f;   
         }
     }
 
+    
     // Update is called once per frame
     void Update()
     {
+        //Retrieve current state from GameManager Component
+        gameState = game_manager.gameState;
+
         SpeedUpdates();
+
+        //Mobile Input
         if (Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
             if (touch.phase == TouchPhase.Began)
             {
-                if ((touch.position.x < screenWidth / 2) && ((state - 1) == 1 || (state - 1) == 2))
+                if ((touch.position.x < screenWidth / 2) && touch.position.y < Screen.height/1.5f && ((state - 1) == 1 || (state - 1) == 2))
                 {
                     moveLeft = true;
                     state -= 1;
                 }
-                if ((touch.position.x > screenWidth / 2) && ((state + 1) == 2 || (state + 1) == 3))
+                if ((touch.position.x > screenWidth / 2) && touch.position.y < Screen.height / 1.5f  && ((state + 1) == 2 || (state + 1) == 3))
                 {
                     moveRight = true;
                     state += 1;
@@ -75,6 +92,7 @@ public class PlayerController : MonoBehaviour
             }
             
         }
+        //Keyboard Input
         if (Input.GetKeyDown(KeyCode.LeftArrow) && ((state - 1) == 1 || (state - 1) == 2))
         {
             moveLeft = true;
@@ -92,7 +110,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
 
-        if (!game_manager.GameOver)
+        if (gameState.Equals("play"))
         {
             transform.Translate(Vector3.down * forwardsForce * Time.deltaTime);
             if (moveLeft)
@@ -108,6 +126,8 @@ public class PlayerController : MonoBehaviour
                 moveRight = false;
             }
         }
+            
+        
         
     }
 
@@ -152,9 +172,12 @@ public class PlayerController : MonoBehaviour
 
             offset += 60f;
             overheadOffset += 60;
-
-            Destroy(track_set_clone, 10f);
-            Destroy(overhead_bar_clone, 10f);
+            if (game_manager.gameState.Equals("play"))
+            {
+                Destroy(track_set_clone, 10f);
+                Destroy(overhead_bar_clone, 10f);
+            }
+           
         }
         
         if (!other.tag.Equals("CreateTrack"))

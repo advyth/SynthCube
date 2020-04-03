@@ -63,8 +63,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Kino\Bloom\Editor\BloomEditor.cs" />
-    <Compile Include="Assets\Kino\Bloom\Editor\BloomGraphDrawer.cs" />
+    <Compile Include="Assets\AmplifyMotion\Plugins\Editor\About.cs" />
+    <Compile Include="Assets\AmplifyMotion\Plugins\Editor\AmplifyMotionObjectEditor.cs" />
+    <Compile Include="Assets\AmplifyMotion\Plugins\Editor\AmplifyMotionObjectEditorBase.cs" />
     <Reference Include="UnityEditor.TestRunner">
       <HintPath>C:/Users/Advyth Ashok/ColorPass/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
     </Reference>
@@ -295,6 +296,12 @@
     </Reference>
     <Reference Include="SyntaxTree.VisualStudio.Unity.Bridge">
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/16.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
+    </Reference>
+    <Reference Include="AmplifyMotion">
+      <HintPath>C:/Users/Advyth Ashok/ColorPass/Assets/AmplifyMotion/Plugins/AmplifyMotion.dll</HintPath>
+    </Reference>
+    <Reference Include="AmplifyMotionEditor">
+      <HintPath>C:/Users/Advyth Ashok/ColorPass/Assets/AmplifyMotion/Plugins/Editor/AmplifyMotionEditor.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>C:/Users/Advyth Ashok/ColorPass/Library/PackageCache/com.unity.ext.nunit@1.0.0/net35/unity-custom/nunit.framework.dll</HintPath>
