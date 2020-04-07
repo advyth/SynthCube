@@ -10,6 +10,8 @@ TagManager:
   - red_obstacle
   - yellow_obstacle
   - blue_obstacle
+  - PowerUp_1
+  - DestroyTrack
   layers:
   - Default
   - TransparentFX

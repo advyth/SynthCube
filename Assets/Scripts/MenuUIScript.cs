@@ -8,6 +8,7 @@ public class MenuUIScript : MonoBehaviour
 {
     // Start is called before the first frame update
     public AudioSource menuAudio;
+    public AudioSource ClickSound;
     public GameObject loaderPanel;
     public Slider progressBar;
     void Start()
@@ -18,11 +19,14 @@ public class MenuUIScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.Escape) && Application.platform == RuntimePlatform.Android)
+        {
+            Application.Quit();
+        }
     }
     public void buttonClick()
     {
-        Debug.Log("Clicked");
+        ClickSound.Play();
         StartCoroutine(AudioFader.Fader(menuAudio, 2.2f, 0));
         loaderPanel.SetActive(true);
         Invoke("loaderRoutineStart", 2f);

@@ -14,9 +14,13 @@ public class CameraController : MonoBehaviour
     public float y_camera_offset; //4
     public float z_camera_offset; //7
 
+    public GameManager game_manager;
+    public bool animationOver = false;
+
     // Start is called before the first frame update
     void Start()
     {
+        
         Invoke("DisableAnimation", 2f);
     }
 
@@ -38,5 +42,7 @@ public class CameraController : MonoBehaviour
     void DisableAnimation()
     {
         CameraObject.GetComponent<Animator>().enabled = false;
+        animationOver = true;
+        game_manager.TouchToStartPanel.SetActive(true);
     }
 }
