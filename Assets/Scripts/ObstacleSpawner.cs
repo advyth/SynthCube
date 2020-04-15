@@ -13,8 +13,8 @@ public class ObstacleSpawner : MonoBehaviour
 
     public Transform playerTransform;
 
-    float obstacleZ = 90f;
-    float[] distances = { 50f, 60f, 70f, 80f };
+    public float obstacleZ = 90f;
+    float[] distances = { 50f, 55f, 60f, 80f };
 
     float[] powerUpXPositions = { 2f, 0f, -2f };
 
@@ -24,6 +24,8 @@ public class ObstacleSpawner : MonoBehaviour
 
     public GameObject coins;
 
+    private int prevTimeCoinSpawned = 5;
+
 
     void Start()
     {
@@ -32,6 +34,7 @@ public class ObstacleSpawner : MonoBehaviour
     }
 
     // Update is called once per frame
+  
     void Update()
     {
 
@@ -45,29 +48,58 @@ public class ObstacleSpawner : MonoBehaviour
     }
     public void CreateFirstObstacle(float z)
     {
-        GameObject obstacle = Instantiate(gameObjectArray[returnUniqueColor()], new Vector3(0, 1, z), new Quaternion(0, 0, 0, 0));
+        int objectColorIndex = returnUniqueColor();
+        GameObject obstacle = Instantiate(gameObjectArray[objectColorIndex], new Vector3(0, 1, z), new Quaternion(0, 0, 0, 0));
+        if (objectColorIndex == 0)
+        {
+            obstacle.tag = "obstacle_clone_yellow";
+        }
+        else if (objectColorIndex == 1)
+        {
+            obstacle.tag = "obstacle_clone_red";
+        }
+        else if (objectColorIndex == 2)
+        {
+            obstacle.tag = "obstacle_clone_blue";
+        }
     }
     public void CreateBlock(float z)
     {
 
 
-
-        GameObject obstacle = Instantiate(gameObjectArray[returnUniqueColor()], new Vector3(0, 1, z), new Quaternion(0, 0, 0, 0));
-        if (Random.Range(0,20) == 4 && FindObjectOfType<GameManager>().PowerUp.activeSelf)
+        int objectColorIndex = returnUniqueColor();
+        GameObject obstacle = Instantiate(gameObjectArray[objectColorIndex], new Vector3(0, 1, z), new Quaternion(0, 0, 0, 0));
+        if (objectColorIndex == 0)
+        {
+            obstacle.tag = "obstacle_clone_yellow";
+        }
+        else if (objectColorIndex == 1)
+        {
+            obstacle.tag = "obstacle_clone_red";
+        }
+        else if (objectColorIndex == 2)
+        {
+            obstacle.tag = "obstacle_clone_blue";
+        }
+        if (Random.Range(0,50) == 4 && FindObjectOfType<GameManager>().PowerUpParent.activeSelf)
         {
             GameObject powerUpClone = Instantiate(PowerUp, new Vector3(powerUpXPositions[Random.Range(0, 3)], 2, z + 30), new Quaternion(-90f, 0, 0, 0));
+            powerUpClone.tag = "powerup_clone";
             
         }
-        if (true)
+        if (Random.Range(0,10) == 5 || Random.Range(0,10) == 2)
         {
-            int coinSpawnAmount = 20; //Random.Range(0, 20);
+            int coinSpawnAmount = Random.Range(0, 10);
             int coinSpawnPosition = (int)powerUpXPositions[Random.Range(0, 3)];
             int coinSpawnZPosition = (int)z + 15;
-            int coinSpawnOffset = 2;
+            int coinSpawnOffset = 4;
             for (int i = 0; i < coinSpawnAmount; i++)
             {
                 GameObject coinClone = Instantiate(coins, new Vector3(coinSpawnPosition, 2, coinSpawnZPosition + coinSpawnOffset), new Quaternion(0, 0, 0, 0));
+                coinClone.tag = "coin_clone";
                 coinSpawnOffset += 2;
+                Destroy(coinClone,prevTimeCoinSpawned);
+                prevTimeCoinSpawned += 5;
             }
         }
         

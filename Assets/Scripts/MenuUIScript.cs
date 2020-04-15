@@ -2,18 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI
-;
+using UnityEngine.UI;
+using TMPro;
 public class MenuUIScript : MonoBehaviour
 {
     // Start is called before the first frame update
     public AudioSource menuAudio;
     public AudioSource ClickSound;
     public GameObject loaderPanel;
+    public GameObject coinScoreText;
+    public GameObject highScoreText;
     public Slider progressBar;
     void Start()
     {
         loaderPanel.SetActive(false);
+        if (PlayerPrefs.HasKey("topScore"))
+        {
+            highScoreText.GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetInt("topScore").ToString();
+        }
+        if (PlayerPrefs.HasKey("coinAmount"))
+        {
+            coinScoreText.GetComponent<TextMeshProUGUI>().text = PlayerPrefs.GetInt("coinAmount").ToString();
+        }
     }
 
     // Update is called once per frame

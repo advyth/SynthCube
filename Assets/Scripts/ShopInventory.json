@@ -1,0 +1,44 @@
+{
+	"skins" : [
+		{
+			"index" : 0,
+			"price" : 100,
+			"name" : "cyan"
+		},
+		{
+			"index" : 1,
+			"price" : 100,
+			"name" : "green"
+		},
+		{
+			"index" : 2,
+			"price" : 100,
+			"name" : "pink"
+		},
+		{
+			"index" : 3,
+			"price" : 100,
+			"name" : "yellow"
+		},
+		{
+			"index" : 4,
+			"price" : 100,
+			"name" : "sp_yellow"
+		},
+		{
+			"index" : 5,
+			"price" : 100,
+			"name" : "sp_pink"
+		},
+		{
+			"index" : 6,
+			"price" : 100,
+			"name" : "sp_green"
+		},
+		{
+			"index" : 7,
+			"price" : 100,
+			"name" : "sp_cyan"
+		},
+	]
+}

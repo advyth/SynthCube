@@ -5,7 +5,7 @@ using UnityEngine.UI;
 public class TimerScript : MonoBehaviour
 {
     public bool startTimer = false;
-    private float duration = 5f;
+    public float duration = 5f;
     private Slider progressBarBoost;
    
     // Start is called before the first frame update
@@ -17,6 +17,11 @@ public class TimerScript : MonoBehaviour
     {
         duration = 5f;
     }
+    public void AddDuration(float d)
+    {
+        duration = duration +  (d - duration) ;
+        
+    }
     // Update is called once per frame
     void Update()
     {
@@ -24,6 +29,10 @@ public class TimerScript : MonoBehaviour
         {
             progressBarBoost.value = duration * 0.2f;
             duration = duration - Time.deltaTime;
+        }
+        if (startTimer && duration < 0)
+        {
+            progressBarBoost.transform.gameObject.SetActive(false);
         }
     }
 }

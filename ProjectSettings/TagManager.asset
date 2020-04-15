@@ -12,6 +12,14 @@ TagManager:
   - blue_obstacle
   - PowerUp_1
   - DestroyTrack
+  - Coin
+  - clone_track
+  - coin_clone
+  - obstacle_clone
+  - powerup_clone
+  - obstacle_clone_red
+  - obstacle_clone_yellow
+  - obstacle_clone_blue
   layers:
   - Default
   - TransparentFX

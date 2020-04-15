@@ -18,7 +18,7 @@ public class PlayerController : MonoBehaviour
 
     //Physics Forces
     private float sidewaysForce = 2f;
-    private float forwardsForce = 40f;
+    private float forwardsForce = 50f;
 
     //Player Movement vars
     private bool moveLeft = false;
@@ -28,10 +28,8 @@ public class PlayerController : MonoBehaviour
     private int state = 2;
 
     //Offset For Track Spawning
-    private float offset = 60f;
+    public float offset = 60f;
     
-    //Offset For Overhead Bar Spawning
-    private float overheadOffset = 60f;
 
     private float screenWidth;
 
@@ -45,21 +43,33 @@ public class PlayerController : MonoBehaviour
 
     private bool speedUpdated = false;
 
-    private int createTriggersPassed = 0;
 
     private float prevDestroyTime = 20f;
 
 
 
+    public GameObject MainCamera;
 
+    
 
+    
     // Start is called before the first frame update
-
+    public void ResetEverything()
+    {
+        state = 2;
+        offset = 60f;
+        forwardsForce = 50f;
+        updatedForSpeed = 0f;
+        oldSpeed = 0f;
+        speedUpdated = false;
+        prevDestroyTime = 20f;
+    }
     void Start()
     {
         game_manager = FindObjectOfType<GameManager>();
         screenWidth = Screen.width;
     }
+   
 
     //Function for incrementing speed gradually based on points earned
     //TODO Set speed bar
@@ -133,8 +143,9 @@ public class PlayerController : MonoBehaviour
         
     }
 
-    
+
     // Update is called once per frame
+
     void Update()
     {
         //Retrieve current state from GameManager Component
@@ -142,6 +153,7 @@ public class PlayerController : MonoBehaviour
 
         SpeedUpdates();
 
+        
         //Mobile Input
         if (game_manager.allowControl)
         {
@@ -150,17 +162,15 @@ public class PlayerController : MonoBehaviour
                 Touch touch = Input.GetTouch(0);
                 if (touch.phase == TouchPhase.Began)
                 {
-                    if ((touch.position.x < screenWidth / 2) && touch.position.y < Screen.height / 1.5f && ((state - 1) == 1 || (state - 1) == 2))
+                    if ((touch.position.x < screenWidth / 4) && touch.position.y < Screen.height / 1.5f && ((state - 1) == 1 || (state - 1) == 2))
                     {
                         moveLeft = true;
                         state -= 1;
-                        SetGlow(state);
                     }
-                    if ((touch.position.x > screenWidth / 2) && touch.position.y < Screen.height / 1.5f && ((state + 1) == 2 || (state + 1) == 3))
+                    if ((touch.position.x > (screenWidth -  (screenWidth / 4))) && touch.position.y < Screen.height / 1.5f && ((state + 1) == 2 || (state + 1) == 3))
                     {
                         moveRight = true;
                         state += 1;
-                        SetGlow(state);
                     }
                 }
 
@@ -169,57 +179,17 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.LeftArrow) && ((state - 1) == 1 || (state - 1) == 2))
             {
                 moveLeft = true;
-
                 state -= 1;
-                SetGlow(state);
-
             }
             if (Input.GetKeyDown(KeyCode.RightArrow) && ((state + 1) == 2 || (state + 1) == 3))
             {
                 moveRight = true;
-
                 state += 1;
-                SetGlow(state);
             }
         }
         
     }
-    void SetGlow(int index)
-    {
-        /*
-        Material left_mat = track_set.transform.GetChild(1).gameObject.GetComponent<Renderer>().material;
-        Material center_mat = track_set.transform.GetChild(2).gameObject.GetComponent<Renderer>().material;
-        Material right_mat = track_set.transform.GetChild(3).gameObject.GetComponent<Renderer>().material;
-        if (index == 1)
-        {
-
-
-            left_mat.EnableKeyword("_EMISSION");
-            center_mat.DisableKeyword("_EMISSION");
-            right_mat.DisableKeyword("_EMISSION");
-
-
-        }
-        if (index == 2)
-        {
-
-            left_mat.DisableKeyword("_EMISSION");
-            //left_mat.SetColor("_EmissionColor", non_glow);
-            center_mat.EnableKeyword("_EMISSION");
-            right_mat.DisableKeyword("_EMISSION");
-
-        }
-        if (index == 3)
-        {
-
-
-            left_mat.DisableKeyword("_EMISSION");
-            center_mat.DisableKeyword("_EMISSION"); 
-            right_mat.EnableKeyword("_EMISSION");
-
-
-        }*/
-    }
+    
     private void FixedUpdate()
     {
 
@@ -232,12 +202,15 @@ public class PlayerController : MonoBehaviour
                 zapSound.Play();
                 moveLeft = false;
             }
+         
+
             if (moveRight)
             {
                 transform.Translate(Vector3.right * sidewaysForce);
                 zapSound.Play();
                 moveRight = false;
             }
+            
         }
             
         
@@ -248,30 +221,31 @@ public class PlayerController : MonoBehaviour
     {
         if (!game_manager.PowerupStatus())
         {
-            if (_collider.tag.Equals("red_obstacle") && state != 1)
+            
+            if (_collider.tag.Equals("obstacle_clone_yellow") && state != 1)
+            {
+                game_manager.EndGame();
+            }
+            else if (_collider.tag.Equals("obstacle_clone_yellow") && state == 1)
+            {
+                game_manager.IncrementScore();
+            }
+            if (_collider.tag.Equals("obstacle_clone_red") && state != 2)
             {
                 game_manager.EndGame();
 
             }
-            else if (_collider.tag.Equals("red_obstacle") && state == 1)
+            else if (_collider.tag.Equals("obstacle_clone_red") && state == 2)
             {
                 game_manager.IncrementScore();
             }
 
-            if (_collider.tag.Equals("yellow_obstacle") && state != 2)
-            {
-                game_manager.EndGame();
-            }
-            else if (_collider.tag.Equals("yellow_obstacle") && state == 2)
-            {
-                game_manager.IncrementScore();
-            }
 
-            if (_collider.tag.Equals("blue_obstacle") && state != 3)
+            if (_collider.tag.Equals("obstacle_clone_blue") && state != 3)
             {
                 game_manager.EndGame();
             }
-            else if (_collider.tag.Equals("blue_obstacle") && state == 3)
+            else if (_collider.tag.Equals("obstacle_clone_blue") && state == 3)
             {
                 game_manager.IncrementScore();
             }
@@ -286,16 +260,16 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        createTriggersPassed++;
+        
         if (other.tag.Equals("CreateTrack"))
         {
             for (int i = 0; i < 3; i++)
             {
                 track_set_clone = (GameObject)Instantiate(track_set, new Vector3(0, 0, offset), new Quaternion(0, 0, 0, 0));
+                track_set_clone.tag = "clone_track";
                 //overhead_bar_clone = (GameObject)Instantiate(overhead_bars, new Vector3(0, 35.4f, overheadOffset), new Quaternion(0, 0, 0, 0));
 
                 offset += 60f;
-                overheadOffset += 60;
                 Destroy(track_set_clone,prevDestroyTime + i*10);
                 prevDestroyTime = prevDestroyTime + i * 10;
 
@@ -303,7 +277,11 @@ public class PlayerController : MonoBehaviour
             
            
         }
-        
+        if (other.tag.Equals("Coin"))
+        {
+            game_manager.IncrementCoinScore();
+            Destroy(other.gameObject);
+        }
         
         if (!other.tag.Equals("CreateTrack")  && !other.tag.Equals("PowerUp_1"))
         {
@@ -313,8 +291,8 @@ public class PlayerController : MonoBehaviour
         
         if (other.tag.Equals("PowerUp_1"))
         {
+            FindObjectOfType<CameraController>().zoomOut = true;
             game_manager.ActivatePowerUp();
-            game_manager.PowerUp.SetActive(false);
         }
 
     }
