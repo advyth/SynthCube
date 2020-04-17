@@ -62,10 +62,8 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -313,6 +311,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 12006}
     - Class: 114
       Script: {instanceID: 12544}
+    - Class: 114
+      Script: {instanceID: 12766}
     - Class: 114
       Script: {instanceID: 13118}
     - Class: 114
@@ -718,7 +718,7 @@ ScriptsOnlyBuild:
     className: FilmGrain
   - hash:
       serializedVersion: 2
-      Hash: df81534fdb847af46802fdf6e0a6fd4d
+      Hash: 5abc32edb5f2cc7961b6f479c496333e
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: PlayerController
@@ -880,7 +880,7 @@ ScriptsOnlyBuild:
     className: MotionBlur
   - hash:
       serializedVersion: 2
-      Hash: 649abb834a1607c381458ef5018eeb6c
+      Hash: a8a16b586ee144954e50323bb0a84167
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: StoreManager

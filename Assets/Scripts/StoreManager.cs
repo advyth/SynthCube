@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class StoreManager : MonoBehaviour
 {
+    
+    public float timeRequired = 1f;
     public int state = 0;
     public GameObject PlayerCollection;
     public GameObject LoaderPanel;
@@ -118,12 +120,13 @@ public class StoreManager : MonoBehaviour
     {
         if (state > 0)
         {
+            state -= 1;
             selectButtonText.text = "SELECT";
             buyButtonText.transform.parent.gameObject.GetComponent<Button>().interactable = true;
+            selectButtonText.transform.parent.gameObject.GetComponent<Button>().interactable = true;
             buyButtonText.text = "BUY";
             MoveSound.Play();
-            target = new Vector3(PlayerCollection.transform.position.x + 6.65f, PlayerCollection.transform.position.y, PlayerCollection.transform.position.z);
-            state -= 1;
+            target = new Vector3(PlayerCollection.transform.position.x + 6.65f, PlayerCollection.transform.position.y, PlayerCollection.transform.position.z);      
             moveLeft = true;
             coinText.text = itemAmount[state].ToString();
             if (int.Parse(selfCoinText.text) < int.Parse(coinText.text))
@@ -154,6 +157,7 @@ public class StoreManager : MonoBehaviour
         {
             selectButtonText.text = "SELECT";
             buyButtonText.transform.parent.gameObject.GetComponent<Button>().interactable = true;
+            selectButtonText.transform.parent.gameObject.GetComponent<Button>().interactable = true;
             buyButtonText.text = "BUY";
             MoveSound.Play();
             target = new Vector3(PlayerCollection.transform.position.x - 6.65f, PlayerCollection.transform.position.y, PlayerCollection.transform.position.z);

@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     public GameObject MenuCoinScore;
     public GameObject QuitGamePanel;
     public GameObject GoButtonObject;
+    public GameObject GameCoinImage;
 
     public Text endText;
     public Button restartButton;
@@ -75,7 +76,9 @@ public class GameManager : MonoBehaviour
         }
         MenuUI.SetActive(true);
         //Panel init
-
+        CoinScoreText.SetActive(false);
+        ScoreTextMesh.SetActive(false);
+        GameCoinImage.SetActive(false);
         PauseButton.SetActive(false);
         PausePanel.SetActive(false);
         GameOverUI.SetActive(false);
@@ -86,9 +89,9 @@ public class GameManager : MonoBehaviour
         //TouchToStartPanel.SetActive(false);
 
         //Responsive UI placements
-        ScoreTextMesh.transform.position = new Vector2(100, Screen.height - 80);
+        //ScoreTextMesh.transform.position = new Vector2(100, Screen.height - 80);
         PauseButton.transform.position = new Vector2(Screen.width - 100, Screen.height - 80);
-        CoinScoreText.transform.position = new Vector2(100, Screen.height - 210);
+        //CoinScoreText.transform.position = new Vector2(100, Screen.height - 210);
 
         //state init
         gameState = "init";
@@ -206,8 +209,10 @@ public class GameManager : MonoBehaviour
         MenuUI.SetActive(false);
         ScoreTextMesh.SetActive(true);
         CoinScoreText.SetActive(true);
+        GameCoinImage.SetActive(true);
 
     }
+    
     public void GoToStore()
     {
 
@@ -257,7 +262,6 @@ public class GameManager : MonoBehaviour
                 int coinAmount = coinScore + PlayerPrefs.GetInt("coinAmount");
                 PlayerPrefs.SetInt("coinAmount", coinAmount);
                 PlayerPrefs.Save();
-                Debug.Log(PlayerPrefs.GetInt("coinAmount").ToString());
             }
 
         }
@@ -276,6 +280,7 @@ public class GameManager : MonoBehaviour
         endText.text = gameScore.ToString();
         GameOverUI.SetActive(true);
         GameOverUI.transform.GetChild(3).GetComponent<TextMeshProUGUI>().text = coinScore.ToString();
+        GameCoinImage.SetActive(false);
         //Invoke("RestartScene", 2f);
 
     }
@@ -303,6 +308,7 @@ public class GameManager : MonoBehaviour
     }
     public void ResetScene()
     {
+        ScoreTextMesh.SetActive(false);
         gameState = "init";
         Player.transform.position = new Vector3(0f, 1.85f, -26.3f);
         MainCamera.transform.localEulerAngles = new Vector3(10, 0, 0);
@@ -311,8 +317,13 @@ public class GameManager : MonoBehaviour
         var cloneObstacleYellow = GameObject.FindGameObjectsWithTag("obstacle_clone_yellow");
         var cloneObstacleRed = GameObject.FindGameObjectsWithTag("obstacle_clone_red");
         var cloneObstacleBlue = GameObject.FindGameObjectsWithTag("obstacle_clone_blue");
+        var cloneMountain = GameObject.FindGameObjectsWithTag("mountains");
 
         var clonePowerup = GameObject.FindGameObjectsWithTag("powerup_clone");
+        foreach (GameObject obj in cloneMountain)
+        {
+            Destroy(obj);
+        }
         foreach (GameObject obj in cloneTrack)
         {
             Destroy(obj);
@@ -339,6 +350,7 @@ public class GameManager : MonoBehaviour
         }
         FindObjectOfType<ObstacleSpawner>().obstacleZ = 90f;
         FindObjectOfType<PlayerController>().ResetEverything();
+        
         GameOverUI.SetActive(false);
 
         BackgroundMusic.Stop();
@@ -349,9 +361,10 @@ public class GameManager : MonoBehaviour
         gameScore = 0;
         ScoreTextMesh.GetComponent<TextMeshProUGUI>().text = gameScore.ToString();
         CoinScoreText.GetComponent<TextMeshProUGUI>().text = coinScore.ToString();
-        ScoreTextMesh.SetActive(true);
         CoinScoreText.SetActive(true);
         GoButtonObject.SetActive(true);
+        GameCoinImage.SetActive(true);
+
 
 
 
@@ -365,9 +378,10 @@ public class GameManager : MonoBehaviour
     {
         gameState = "play";
         allowControl = true;
-        
+        ScoreTextMesh.SetActive(true);
         PauseButton.SetActive(true);
         GoButtonObject.SetActive(false);
+        
     }
  
     public void PauseGame()

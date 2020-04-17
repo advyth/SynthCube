@@ -20,6 +20,7 @@ TagManager:
   - obstacle_clone_red
   - obstacle_clone_yellow
   - obstacle_clone_blue
+  - mountains
   layers:
   - Default
   - TransparentFX

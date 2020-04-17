@@ -5,13 +5,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     //Game Manager
-    private GameManager game_manager;
+
 
     public AudioSource zapSound;
-    
     //Map Game Objects
     public GameObject track_set;
     private GameObject track_set_clone;
+    public GameObject mountains;
+    private GameObject mountain_clone;
     
     //Overhead Bar Objects
     
@@ -25,10 +26,12 @@ public class PlayerController : MonoBehaviour
     private bool moveRight = false;
 
     //Track State Management
-    private int state = 2;
+    public int state = 2;
 
     //Offset For Track Spawning
     public float offset = 60f;
+
+    private float mountainOffset = 120;
     
 
     private float screenWidth;
@@ -46,6 +49,7 @@ public class PlayerController : MonoBehaviour
 
     private float prevDestroyTime = 20f;
 
+    private Touch touch;
 
 
     public GameObject MainCamera;
@@ -56,84 +60,91 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     public void ResetEverything()
     {
+        moveLeft = false;
+        moveRight = false;
         state = 2;
         offset = 60f;
+        mountainOffset = 85f;
         forwardsForce = 50f;
         updatedForSpeed = 0f;
         oldSpeed = 0f;
         speedUpdated = false;
         prevDestroyTime = 20f;
+        touch = new Touch();
     }
     void Start()
     {
-        game_manager = FindObjectOfType<GameManager>();
+        
         screenWidth = Screen.width;
+        mountain_clone = (GameObject)Instantiate(mountains, new Vector3(22, 3.5f, mountainOffset), new Quaternion(0, 0, 0, 0));
+        mountain_clone.tag = "mountains";
+        offset += 85;
     }
-   
+
 
     //Function for incrementing speed gradually based on points earned
     //TODO Set speed bar
     //TODO Stepped Increments {+5, +10, +14, +17}
     private void SpeedUpdates()
     {
-        if (game_manager.PowerupStatus() && !speedUpdated)
+        if (FindObjectOfType<GameManager>().PowerupStatus() && !speedUpdated)
         {
             oldSpeed = forwardsForce;
             forwardsForce = 120f;
             speedUpdated = true;
         }
-        else if(!game_manager.PowerupStatus())
+        else if(!FindObjectOfType<GameManager>().PowerupStatus())
         {
             if (forwardsForce == 120f)
             {
                 speedUpdated = false;
                 forwardsForce = oldSpeed;
             }
-            if (updatedForSpeed != game_manager.gameScore && game_manager.gameScore != 0)
+            if (updatedForSpeed != FindObjectOfType<GameManager>().gameScore && FindObjectOfType<GameManager>().gameScore != 0)
             {
-                if (game_manager.gameScore == 10)
+                if (FindObjectOfType<GameManager>().gameScore == 10)
                 {
-                    updatedForSpeed = game_manager.gameScore;
+                    updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
                     forwardsForce += 10f;
                 }
-                else if (game_manager.gameScore == 20)
+                else if (FindObjectOfType<GameManager>().gameScore == 20)
                 {
-                    updatedForSpeed = game_manager.gameScore;
+                    updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
                     forwardsForce += 9f;
                 }
-                else if (game_manager.gameScore == 30)
+                else if (FindObjectOfType<GameManager>().gameScore == 30)
                 {
-                    updatedForSpeed = game_manager.gameScore;
+                    updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
                     forwardsForce += 8f;
                 }
-                else if (game_manager.gameScore == 40)
+                else if (FindObjectOfType<GameManager>().gameScore == 40)
                 {
-                    updatedForSpeed = game_manager.gameScore;
+                    updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
                     forwardsForce += 7f;
                 }
-                else if (game_manager.gameScore == 50)
+                else if (FindObjectOfType<GameManager>().gameScore == 50)
                 {
-                    updatedForSpeed = game_manager.gameScore;
+                    updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
                     forwardsForce += 6f;
                 }
-                else if (game_manager.gameScore == 70)
+                else if (FindObjectOfType<GameManager>().gameScore == 70)
                 {
-                    updatedForSpeed = game_manager.gameScore;
+                    updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
                     forwardsForce += 4f;
                 }
-                else if (game_manager.gameScore == 80)
+                else if (FindObjectOfType<GameManager>().gameScore == 80)
                 {
-                    updatedForSpeed = game_manager.gameScore;
+                    updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
                     forwardsForce += 3f;
                 }
-                else if (game_manager.gameScore == 90)
+                else if (FindObjectOfType<GameManager>().gameScore == 90)
                 {
-                    updatedForSpeed = game_manager.gameScore;
+                    updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
                     forwardsForce += 2f;
                 }
-                else if (game_manager.gameScore == 100)
+                else if (FindObjectOfType<GameManager>().gameScore == 100)
                 {
-                    updatedForSpeed = game_manager.gameScore;
+                    updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
                     forwardsForce += 1f;
                 }
 
@@ -149,17 +160,17 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         //Retrieve current state from GameManager Component
-        gameState = game_manager.gameState;
+        gameState = FindObjectOfType<GameManager>().gameState;
 
         SpeedUpdates();
 
         
         //Mobile Input
-        if (game_manager.allowControl)
+        if (FindObjectOfType<GameManager>().allowControl)
         {
             if (Input.touchCount > 0)
             {
-                Touch touch = Input.GetTouch(0);
+                touch = Input.GetTouch(0);
                 if (touch.phase == TouchPhase.Began)
                 {
                     if ((touch.position.x < screenWidth / 4) && touch.position.y < Screen.height / 1.5f && ((state - 1) == 1 || (state - 1) == 2))
@@ -219,40 +230,41 @@ public class PlayerController : MonoBehaviour
 
     private void CheckIfPass(Collider _collider)
     {
-        if (!game_manager.PowerupStatus())
+        if (!FindObjectOfType<GameManager>().PowerupStatus())
         {
             
             if (_collider.tag.Equals("obstacle_clone_yellow") && state != 1)
             {
-                game_manager.EndGame();
+                
+                FindObjectOfType<GameManager>().EndGame();
             }
             else if (_collider.tag.Equals("obstacle_clone_yellow") && state == 1)
             {
-                game_manager.IncrementScore();
+                FindObjectOfType<GameManager>().IncrementScore();
             }
             if (_collider.tag.Equals("obstacle_clone_red") && state != 2)
             {
-                game_manager.EndGame();
+                FindObjectOfType<GameManager>().EndGame();
 
             }
             else if (_collider.tag.Equals("obstacle_clone_red") && state == 2)
             {
-                game_manager.IncrementScore();
+                FindObjectOfType<GameManager>().IncrementScore();
             }
 
 
             if (_collider.tag.Equals("obstacle_clone_blue") && state != 3)
             {
-                game_manager.EndGame();
+                FindObjectOfType<GameManager>().EndGame();
             }
             else if (_collider.tag.Equals("obstacle_clone_blue") && state == 3)
             {
-                game_manager.IncrementScore();
+                FindObjectOfType<GameManager>().IncrementScore();
             }
         }
         else
         {
-            game_manager.IncrementScore();
+            FindObjectOfType<GameManager>().IncrementScore();
             Destroy(_collider.gameObject);
         }
         
@@ -266,11 +278,15 @@ public class PlayerController : MonoBehaviour
             for (int i = 0; i < 3; i++)
             {
                 track_set_clone = (GameObject)Instantiate(track_set, new Vector3(0, 0, offset), new Quaternion(0, 0, 0, 0));
+                mountain_clone = (GameObject)Instantiate(mountains, new Vector3(22, 3.5f, mountainOffset), new Quaternion(0, 0, 0, 0));
                 track_set_clone.tag = "clone_track";
+                mountain_clone.tag = "mountains";
                 //overhead_bar_clone = (GameObject)Instantiate(overhead_bars, new Vector3(0, 35.4f, overheadOffset), new Quaternion(0, 0, 0, 0));
 
                 offset += 60f;
-                Destroy(track_set_clone,prevDestroyTime + i*10);
+                mountainOffset += 85;
+                Destroy(track_set_clone, prevDestroyTime + i*10);
+                Destroy(mountain_clone, prevDestroyTime + i * 10);
                 prevDestroyTime = prevDestroyTime + i * 10;
 
             }
@@ -279,7 +295,7 @@ public class PlayerController : MonoBehaviour
         }
         if (other.tag.Equals("Coin"))
         {
-            game_manager.IncrementCoinScore();
+            FindObjectOfType<GameManager>().IncrementCoinScore();
             Destroy(other.gameObject);
         }
         
@@ -292,7 +308,7 @@ public class PlayerController : MonoBehaviour
         if (other.tag.Equals("PowerUp_1"))
         {
             FindObjectOfType<CameraController>().zoomOut = true;
-            game_manager.ActivatePowerUp();
+            FindObjectOfType<GameManager>().ActivatePowerUp();
         }
 
     }
