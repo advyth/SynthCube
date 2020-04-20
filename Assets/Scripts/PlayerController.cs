@@ -105,42 +105,42 @@ public class PlayerController : MonoBehaviour
                 if (FindObjectOfType<GameManager>().gameScore == 10)
                 {
                     updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
-                    forwardsForce += 10f;
+                    forwardsForce += 5f;
                 }
                 else if (FindObjectOfType<GameManager>().gameScore == 20)
                 {
                     updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
-                    forwardsForce += 9f;
+                    forwardsForce += 4f;
                 }
                 else if (FindObjectOfType<GameManager>().gameScore == 30)
                 {
                     updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
-                    forwardsForce += 8f;
+                    forwardsForce += 3f;
                 }
                 else if (FindObjectOfType<GameManager>().gameScore == 40)
                 {
                     updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
-                    forwardsForce += 7f;
+                    forwardsForce += 2f;
                 }
                 else if (FindObjectOfType<GameManager>().gameScore == 50)
                 {
                     updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
-                    forwardsForce += 6f;
+                    forwardsForce += 1f;
                 }
                 else if (FindObjectOfType<GameManager>().gameScore == 70)
                 {
                     updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
-                    forwardsForce += 4f;
+                    forwardsForce += 1f;
                 }
                 else if (FindObjectOfType<GameManager>().gameScore == 80)
                 {
                     updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
-                    forwardsForce += 3f;
+                    forwardsForce += 1f;
                 }
                 else if (FindObjectOfType<GameManager>().gameScore == 90)
                 {
                     updatedForSpeed = FindObjectOfType<GameManager>().gameScore;
-                    forwardsForce += 2f;
+                    forwardsForce += 1f;
                 }
                 else if (FindObjectOfType<GameManager>().gameScore == 100)
                 {
@@ -240,6 +240,8 @@ public class PlayerController : MonoBehaviour
             }
             else if (_collider.tag.Equals("obstacle_clone_yellow") && state == 1)
             {
+                _collider.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                _collider.gameObject.GetComponent<ParticleSystem>().Play();
                 FindObjectOfType<GameManager>().IncrementScore();
             }
             if (_collider.tag.Equals("obstacle_clone_red") && state != 2)
@@ -249,6 +251,8 @@ public class PlayerController : MonoBehaviour
             }
             else if (_collider.tag.Equals("obstacle_clone_red") && state == 2)
             {
+                _collider.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                _collider.gameObject.GetComponent<ParticleSystem>().Play();
                 FindObjectOfType<GameManager>().IncrementScore();
             }
 
@@ -259,13 +263,15 @@ public class PlayerController : MonoBehaviour
             }
             else if (_collider.tag.Equals("obstacle_clone_blue") && state == 3)
             {
+                _collider.gameObject.GetComponent<MeshRenderer>().enabled = false;
+                _collider.gameObject.GetComponent<ParticleSystem>().Play();
                 FindObjectOfType<GameManager>().IncrementScore();
             }
         }
         else
         {
             FindObjectOfType<GameManager>().IncrementScore();
-            Destroy(_collider.gameObject);
+            Destroy(_collider.gameObject,1);
         }
         
     }
@@ -302,7 +308,7 @@ public class PlayerController : MonoBehaviour
         if (!other.tag.Equals("CreateTrack")  && !other.tag.Equals("PowerUp_1"))
         {
             CheckIfPass(other);
-            Destroy(other.gameObject);
+            Destroy(other.gameObject, 1f);
         }
         
         if (other.tag.Equals("PowerUp_1"))

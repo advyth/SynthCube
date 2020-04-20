@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Assets\FastMobileBloom\FastMobileBloom.cs" />
     <Compile Include="Assets\Scripts\AudioFader.cs" />
+    <Compile Include="Assets\Scripts\AuthScript.cs" />
     <Compile Include="Assets\Scripts\CameraController.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\MenuUIScript.cs" />

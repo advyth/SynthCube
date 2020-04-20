@@ -5,6 +5,7 @@ using UnityEngine;
 public class ObstacleSpawner : MonoBehaviour
 {
     // Start is called before the first frame update
+    public ParticleSystem redParticles;
 
     public GameObject[] gameObjectArray;
     float delay = 0.5f;
@@ -29,6 +30,10 @@ public class ObstacleSpawner : MonoBehaviour
 
     void Start()
     {
+        gameObjectArray[0].GetComponent<ParticleSystem>().Stop();
+        gameObjectArray[1].GetComponent<ParticleSystem>().Stop();
+        gameObjectArray[2].GetComponent<ParticleSystem>().Stop();
+
         CreateFirstObstacle(obstacleZ);
         obstacleZ = obstacleZ + distances[Random.Range(0, 4)];
     }
@@ -62,6 +67,8 @@ public class ObstacleSpawner : MonoBehaviour
         {
             obstacle.tag = "obstacle_clone_blue";
         }
+        obstacle.gameObject.GetComponent<ParticleSystem>().Stop();
+
     }
     public void CreateBlock(float z)
     {
@@ -81,6 +88,8 @@ public class ObstacleSpawner : MonoBehaviour
         {
             obstacle.tag = "obstacle_clone_blue";
         }
+        obstacle.gameObject.GetComponent<ParticleSystem>().Stop();
+
         if (Random.Range(0,50) == 4 && FindObjectOfType<GameManager>().PowerUpParent.activeSelf)
         {
             GameObject powerUpClone = Instantiate(PowerUp, new Vector3(powerUpXPositions[Random.Range(0, 3)], 2, z + 30), new Quaternion(-90f, 0, 0, 0));
@@ -89,15 +98,15 @@ public class ObstacleSpawner : MonoBehaviour
         }
         if (Random.Range(0,10) == 5 || Random.Range(0,10) == 2)
         {
-            int coinSpawnAmount = Random.Range(0, 10);
-            int coinSpawnPosition = (int)powerUpXPositions[Random.Range(0, 3)];
-            int coinSpawnZPosition = (int)z + 15;
-            int coinSpawnOffset = 4;
+            float coinSpawnAmount = Random.Range(0, 10);
+            float coinSpawnPosition = (int)powerUpXPositions[Random.Range(0, 3)];
+            float coinSpawnZPosition = (int)z + 15;
+            float coinSpawnOffset = 0;
             for (int i = 0; i < coinSpawnAmount; i++)
             {
                 GameObject coinClone = Instantiate(coins, new Vector3(coinSpawnPosition, 2, coinSpawnZPosition + coinSpawnOffset), new Quaternion(0, 0, 0, 0));
                 coinClone.tag = "coin_clone";
-                coinSpawnOffset += 2;
+                coinSpawnOffset += 6;
                 Destroy(coinClone,prevTimeCoinSpawned);
                 prevTimeCoinSpawned += 5;
             }

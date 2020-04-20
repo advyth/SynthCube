@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 
 public class StoreManager : MonoBehaviour
 {
-    
+
     public float timeRequired = 1f;
     public int state = 0;
     public GameObject PlayerCollection;
@@ -17,12 +17,13 @@ public class StoreManager : MonoBehaviour
     public TextMeshProUGUI selfCoinText;
     public TextMeshProUGUI buyButtonText;
     public TextMeshProUGUI selectButtonText;
+    public Slider ProgressBar;
     private bool moveLeft = false;
     private bool moveRight = false;
     private Vector3 target;
     private int playerCount = 9;
     List<int> inventory;
-    private int[] itemAmount = {0, 100, 200, 300, 400, 500, 600, 700, 800 };
+    private int[] itemAmount = { 0, 100, 200, 300, 400, 500, 600, 700, 800 };
     // Start is called before the first frame update
     void Start()
     {
@@ -53,7 +54,7 @@ public class StoreManager : MonoBehaviour
             {
                 inventory.Add(int.Parse(player_inventory[i] + ""));
             }
-            
+
         }
         if (inventory.Contains(state))
         {
@@ -76,6 +77,8 @@ public class StoreManager : MonoBehaviour
         AsyncOperation loadMainGame = SceneManager.LoadSceneAsync("MainGame");
         while (!loadMainGame.isDone)
         {
+            ProgressBar.value = loadMainGame.progress;
+            Debug.Log(ProgressBar.value);
             yield return null;
         }
     }
@@ -83,12 +86,19 @@ public class StoreManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+
             LoaderPanel.SetActive(true);
             Invoke("CallCoroutine", 0.2f);
         }
     }
-    void CallCoroutine()
+    public void InvokeCouroutine()
     {
+        LoaderPanel.SetActive(true);
+        Invoke("CallCoroutine", 0.2f);
+    }
+    public void CallCoroutine()
+    {
+        
         StartCoroutine(LoadMainGameAsync());
     }
 

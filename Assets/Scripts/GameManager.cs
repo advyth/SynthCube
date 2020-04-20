@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
     public Button restartButton;
     public Slider progressBar;
     public GameObject BoostTimer;
+    public Slider loaderPanelProgressBar;
 
     //Game state management vars
     public int gameScore;
@@ -90,7 +91,6 @@ public class GameManager : MonoBehaviour
 
         //Responsive UI placements
         //ScoreTextMesh.transform.position = new Vector2(100, Screen.height - 80);
-        PauseButton.transform.position = new Vector2(Screen.width - 100, Screen.height - 80);
         //CoinScoreText.transform.position = new Vector2(100, Screen.height - 210);
 
         //state init
@@ -204,6 +204,10 @@ public class GameManager : MonoBehaviour
         ShipEngineAudio.Play();
 
     }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
     public void DisableGameMenuUI()
     {
         MenuUI.SetActive(false);
@@ -212,13 +216,23 @@ public class GameManager : MonoBehaviour
         GameCoinImage.SetActive(true);
 
     }
-    
+
     public void GoToStore()
     {
-
-
         LoaderPanel.SetActive(true);
-        SceneManager.LoadScene("StoreScene");
+        StartCoroutine(LoadStoreAsync());
+    }
+    public IEnumerator LoadStoreAsync()
+    {
+        
+        AsyncOperation loadScene = SceneManager.LoadSceneAsync("StoreScene");
+        while (!loadScene.isDone)
+        {
+            
+            loaderPanelProgressBar.value = loadScene.progress;
+            yield return null;
+        }
+        
     }
     public void QuitGameDialog()
     {
@@ -299,7 +313,7 @@ public class GameManager : MonoBehaviour
         //gameScoreText.text = gameScore.ToString();
 
     }
-
+    
     public void RestartScene()
     {
         ClickAudio.Play();
@@ -369,6 +383,7 @@ public class GameManager : MonoBehaviour
 
 
     }
+    
     public void GoButtonClicked()
     {
         
