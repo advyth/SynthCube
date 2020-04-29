@@ -8,6 +8,7 @@ public class CameraController : MonoBehaviour
     public Transform cameraTransform;
 
     public GameObject CameraObject;
+    public GameObject Sun;
 
     //Camera Offset
     public float x_camera_offset;
@@ -89,6 +90,7 @@ public class CameraController : MonoBehaviour
     {
         
         cameraTransform.position = playerTransform.position + new Vector3(x_camera_offset, y_camera_offset, z_camera_offset);
+        Sun.transform.position = new Vector3(0, 15.7f, cameraTransform.position.z + 200);
        
         
     }
